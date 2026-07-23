@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36908.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KickFive", "KickFive.csproj", "{120989EF-7687-4847-B89D-7EDA90074DDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{120989EF-7687-4847-B89D-7EDA90074DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120989EF-7687-4847-B89D-7EDA90074DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120989EF-7687-4847-B89D-7EDA90074DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120989EF-7687-4847-B89D-7EDA90074DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E50FA67-47AF-4616-A445-DBB7564752C0}
+	EndGlobalSection
+EndGlobal

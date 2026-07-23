@@ -1,0 +1,19 @@
+{
+  "name": "kickfive",
+  "version": "1.0.0",
+  "description": "KickFive",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rayane-lrb/KickFive.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rayane-lrb/KickFive/issues"
+  },
+  "homepage": "https://github.com/Rayane-lrb/KickFive#readme"
+}
