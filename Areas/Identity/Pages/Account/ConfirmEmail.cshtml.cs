@@ -10,15 +10,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using KickFive.Data;
+using KickFive.Models;
 
 namespace KickFive.Areas.Identity.Pages.Account;
 
 public class ConfirmEmailModel : PageModel
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
+    public ConfirmEmailModel(UserManager<User> userManager)
     {
         _userManager = userManager;
     }

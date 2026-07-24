@@ -17,23 +17,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using KickFive.Data;
+using KickFive.Models;
 
 namespace KickFive.Areas.Identity.Pages.Account;
 
 public class RegisterModel : PageModel
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserStore<ApplicationUser> _userStore;
-    private readonly IUserEmailStore<ApplicationUser> _emailStore;
+    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<User> _userManager;
+    private readonly IUserStore<User> _userStore;
+    private readonly IUserEmailStore<User> _emailStore;
     private readonly ILogger<RegisterModel> _logger;
     private readonly IEmailSender _emailSender;
 
     public RegisterModel(
-        UserManager<ApplicationUser> userManager,
-        IUserStore<ApplicationUser> userStore,
-        SignInManager<ApplicationUser> signInManager,
+        UserManager<User> userManager,
+        IUserStore<User> userStore,
+        SignInManager<User> signInManager,
         ILogger<RegisterModel> logger,
         IEmailSender emailSender)
     {
@@ -154,26 +154,26 @@ public class RegisterModel : PageModel
         return Page();
     }
 
-    private ApplicationUser CreateUser()
+    private User CreateUser()
     {
         try
         {
-            return Activator.CreateInstance<ApplicationUser>();
+            return Activator.CreateInstance<User>();
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(User)}'. " +
+                $"Ensure that '{nameof(User)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                 $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
         }
     }
 
-    private IUserEmailStore<ApplicationUser> GetEmailStore()
+    private IUserEmailStore<User> GetEmailStore()
     {
         if (!_userManager.SupportsUserEmail)
         {
             throw new NotSupportedException("The default UI requires a user store with email support.");
         }
-        return (IUserEmailStore<ApplicationUser>)_userStore;
+        return (IUserEmailStore<User>)_userStore;
     }
 }
