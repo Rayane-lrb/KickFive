@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36908.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KickFive", "KickFive.csproj", "{120989EF-7687-4847-B89D-7EDA90074DDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KickFive.Data", "..\KickFive.Data\KickFive.Data.csproj", "{7CBD3FD1-CBF0-408A-8287-F7DCF419047B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{120989EF-7687-4847-B89D-7EDA90074DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{120989EF-7687-4847-B89D-7EDA90074DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{120989EF-7687-4847-B89D-7EDA90074DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CBD3FD1-CBF0-408A-8287-F7DCF419047B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBD3FD1-CBF0-408A-8287-F7DCF419047B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CBD3FD1-CBF0-408A-8287-F7DCF419047B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CBD3FD1-CBF0-408A-8287-F7DCF419047B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

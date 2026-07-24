@@ -1,8 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using KickFive.Data;
+using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("KickFiveContext") ?? throw new InvalidOperationException("Connection string 'KickFiveContext' not found.");
 
 builder.Services.AddDbContext<KickFiveContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<KickFiveContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
