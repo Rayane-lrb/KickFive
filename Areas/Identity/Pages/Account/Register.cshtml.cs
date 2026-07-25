@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using KickFive.Models;
+using System.Runtime.ExceptionServices;
 
 namespace KickFive.Areas.Identity.Pages.Account;
 
@@ -70,6 +71,21 @@ public class RegisterModel : PageModel
     /// </summary>
     public class InputModel
     {
+        [Required]
+        [StringLength(100)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(100)]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
+
+        [Required]
+        [Phone]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone Number")]
+        public string Phone { get; set; } = default;
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -114,6 +130,8 @@ public class RegisterModel : PageModel
         {
             var user = CreateUser();
 
+            user.FirstName = Input.FirstName;   
+            user.LastName = Input.LastName;
             await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
             await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
             var result = await _userManager.CreateAsync(user, Input.Password);
