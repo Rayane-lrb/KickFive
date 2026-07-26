@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using KickFive.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("KickFiveContext") ?? throw new InvalidOperationException("Connection string 'KickFiveContext' not found.");
 
@@ -14,13 +15,8 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
 
-}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -44,4 +40,64 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+using (var scope = app.Services.CreateScope())
+{
+
+    Console.WriteLine("SEEDING BLOCK STARTED");
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    Console.WriteLine("Got roleManager");
+
+    string[] roles = { "Admin", "User" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            Console.WriteLine($"Creating role: {role}");
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+    var adminEmail = builder.Configuration["AdminUser:Email"];
+    var adminPassword = builder.Configuration["AdminUser:Password"];
+
+    Console.WriteLine($"Admin email from config: '{adminEmail}'");
+    Console.WriteLine($"Admin password from config: '{adminPassword}'");
+
+    if (adminEmail != null && adminPassword != null)
+    {
+        var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
+        Console.WriteLine($"Existing admin found: {existingAdmin != null}");
+        if (existingAdmin == null)
+        {
+
+            var adminUser = new User
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                FirstName = "Admin",
+                LastName = "User",
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(adminUser, adminPassword);
+            Console.WriteLine($"User creation succeeded: {result.Succeeded}");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"User creation error: {error.Code} - {error.Description}");
+                }
+            }
+
+        }
+    }
+}
 app.Run();
