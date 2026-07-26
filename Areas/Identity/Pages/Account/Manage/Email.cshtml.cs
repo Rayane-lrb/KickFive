@@ -11,19 +11,19 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using KickFive.Data;
+using KickFive.Models;
 
 namespace KickFive.Areas.Identity.Pages.Account.Manage;
 
 public class EmailModel : PageModel
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<User> _signInManager;
     private readonly IEmailSender _emailSender;
 
     public EmailModel(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
         IEmailSender emailSender)
     {
         _userManager = userManager;
@@ -73,7 +73,7 @@ public class EmailModel : PageModel
         public string NewEmail { get; set; } = default!;
     }
 
-    private async Task LoadAsync(ApplicationUser user)
+    private async Task LoadAsync(User user)
     {
         var email = await _userManager.GetEmailAsync(user);
         Email = email;

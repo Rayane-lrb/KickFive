@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using KickFive.Data;
+using KickFive.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
@@ -43,10 +43,8 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
 
-    Console.WriteLine("SEEDING BLOCK STARTED");
     var serviceProvider = scope.ServiceProvider;
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    Console.WriteLine("Got roleManager");
 
     string[] roles = { "Admin", "User" };
 
@@ -54,7 +52,6 @@ using (var scope = app.Services.CreateScope())
     {
         if (!await roleManager.RoleExistsAsync(role))
         {
-            Console.WriteLine($"Creating role: {role}");
             await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
@@ -63,13 +60,10 @@ using (var scope = app.Services.CreateScope())
     var adminEmail = builder.Configuration["AdminUser:Email"];
     var adminPassword = builder.Configuration["AdminUser:Password"];
 
-    Console.WriteLine($"Admin email from config: '{adminEmail}'");
-    Console.WriteLine($"Admin password from config: '{adminPassword}'");
 
     if (adminEmail != null && adminPassword != null)
     {
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
-        Console.WriteLine($"Existing admin found: {existingAdmin != null}");
         if (existingAdmin == null)
         {
 
@@ -83,7 +77,6 @@ using (var scope = app.Services.CreateScope())
             };
 
             var result = await userManager.CreateAsync(adminUser, adminPassword);
-            Console.WriteLine($"User creation succeeded: {result.Succeeded}");
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, "Admin");
