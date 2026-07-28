@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KickFive.Migrations
 {
     [DbContext(typeof(KickFiveContext))]
-    partial class KickFiveContextModelSnapshot : ModelSnapshot
+    [Migration("20260726122339_Booking-Migration")]
+    partial class BookingMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,30 +78,6 @@ namespace KickFive.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Field");
-                });
-
-            modelBuilder.Entity("KickFive.Models.Review", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("KickFive.Models.User", b =>
@@ -328,17 +307,6 @@ namespace KickFive.Migrations
                         .IsRequired();
 
                     b.Navigation("Field");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("KickFive.Models.Review", b =>
-                {
-                    b.HasOne("KickFive.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

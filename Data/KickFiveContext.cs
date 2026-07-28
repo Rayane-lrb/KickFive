@@ -6,4 +6,6 @@ public class KickFiveContext(DbContextOptions<KickFiveContext> options) : Identi
 {
     public DbSet<KickFive.Models.Field> Field { get; set; } = default!;
     public DbSet<KickFive.Models.User> User { get; set; } = default!;
+    public DbSet<KickFive.Models.Booking> Booking { get; set; } = default!;
+    public DbSet<KickFive.Models.Review> Review { get; set; } = default!;   
 }
