@@ -314,6 +314,42 @@ namespace KickFive.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if(currentUser == null)             {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            var booking = await _context.Booking.FindAsync(id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+
+            if (!isAdmin && booking.UserId != currentUser.Id)
+            {
+                return Forbid();
+            }
+
+            if (!isAdmin && booking.StartDateTime < DateTime.Now.AddHours(24))
+            {
+                TempData["ErrorMessage"] = "You can't cancel bookings within 24 hours of the start time.";
+                return RedirectToAction(nameof(Details), new { id = booking.Id });
+            }
+
+            booking.Status = "Cancelled";
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
         private bool BookingExists(int id)
         {
             return _context.Booking.Any(e => e.Id == id);
