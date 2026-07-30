@@ -254,6 +254,7 @@ namespace KickFive.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -273,7 +274,7 @@ namespace KickFive.Controllers
 
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
 
-            if (!isAdmin && booking.UserId != currentUser.Id)
+            if (!isAdmin)
             {
                 return Forbid();
             }
@@ -282,7 +283,7 @@ namespace KickFive.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -301,16 +302,11 @@ namespace KickFive.Controllers
 
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
 
-            if(!isAdmin && booking.UserId != currentUser.Id)
+            if(!isAdmin)
             {
                 return Forbid();
             }
 
-            if (!isAdmin && booking.StartDateTime < DateTime.Now.AddHours(24))
-            {
-                ModelState.AddModelError(string.Empty, "You can't delete bookings within 24 hours of the start time.");
-                return Forbid();
-            }
 
             _context.Booking.Remove(booking);
             await _context.SaveChangesAsync();
