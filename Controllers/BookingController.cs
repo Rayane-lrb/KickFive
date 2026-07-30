@@ -350,6 +350,39 @@ namespace KickFive.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Confirm(int id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if(currentUser == null)
+            {
+                return RedirectToPage("/Account/Login", new {area = "Identity" });
+            }
+
+            var booking = await _context.Booking.FindAsync(id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+
+            if(!isAdmin)
+            {
+                return Forbid();
+            }
+
+            booking.Status = "Confirmed";
+
+            _context.Update(booking);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
         private bool BookingExists(int id)
         {
             return _context.Booking.Any(e => e.Id == id);
