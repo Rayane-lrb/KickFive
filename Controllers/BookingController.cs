@@ -47,7 +47,8 @@ namespace KickFive.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            var
+                currentUser = await _userManager.GetUserAsync(User);
 
             if (currentUser == null)
             {
@@ -96,6 +97,7 @@ namespace KickFive.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StartDateTime, EndDateTime, FieldId")] Booking booking)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -142,6 +144,7 @@ namespace KickFive.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -172,6 +175,88 @@ namespace KickFive.Controllers
 
             return View(booking);
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind("Id, StartDateTime, EndDateTime, FieldId")] Booking booking)
+        {
+            var fields = await _context.Field.ToListAsync();
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return RedirectToPage("/Account/Login", new { Area = "Identity" });
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                if (booking.EndDateTime <= booking.StartDateTime)
+                {
+                    ModelState.AddModelError(string.Empty, "End time must be after start time.");
+                    ViewBag.Fields = fields;
+                    return View(booking);
+                }
+
+                var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+
+
+                if (!isAdmin && booking.StartDateTime < DateTime.Now.AddHours(24))
+                {
+                    ModelState.AddModelError(string.Empty, "You can't edit bookings within 24 hours of the start time.");
+                    ViewBag.Fields = fields;
+                    return View(booking);
+                }
+                try
+                {
+                    var existingBooking = await _context.Booking.FindAsync(booking.Id);
+                    if (existingBooking == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (!isAdmin && existingBooking.UserId != currentUser.Id)
+                    {
+                        return Forbid();
+                    }
+                    existingBooking.StartDateTime = booking.StartDateTime;
+                    existingBooking.EndDateTime = booking.EndDateTime;
+                    existingBooking.FieldId = booking.FieldId;
+                    existingBooking.Price = await CalculatePrice(booking.StartDateTime, booking.EndDateTime, booking.FieldId);
+
+                    _context.Update(existingBooking);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!BookingExists(booking.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"An error occurred while updating the booking: {ex.Message}");
+                    ViewBag.Fields = fields;
+                    return View(booking);
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Fields = fields;
+            return View(booking);
+
+        }
+
+        private bool BookingExists(int id)
+        {
+            return _context.Booking.Any(e => e.Id == id);
         }
     }
 }
