@@ -191,5 +191,47 @@ namespace KickFive.Controllers
             }
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Block(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+
+            if(!isAdmin)
+            {
+                return Forbid();
+            }
+
+            if (currentUser.Id == id)
+            {
+                ModelState.AddModelError(string.Empty, "You cannot block yourself.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var userToBlock = await _userManager.FindByIdAsync(id);
+
+            if (userToBlock == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.SetLockoutEndDateAsync(userToBlock, DateTimeOffset.MaxValue);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while blocking the user. Please try again.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
