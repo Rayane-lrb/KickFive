@@ -212,7 +212,7 @@ namespace KickFive.Controllers
 
             if (currentUser.Id == id)
             {
-                ModelState.AddModelError(string.Empty, "You cannot block yourself.");
+                TempData["ErrorMessage"] = "You cannot block your own account.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -223,11 +223,56 @@ namespace KickFive.Controllers
                 return NotFound();
             }
 
+            if (await _userManager.IsLockedOutAsync(userToBlock))
+            {
+                TempData["ErrorMessage"] = "This user is already blocked.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var result = await _userManager.SetLockoutEndDateAsync(userToBlock, DateTimeOffset.MaxValue);
 
             if (!result.Succeeded)
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while blocking the user. Please try again.");
+                TempData["ErrorMessage"] = "An error occurred while blocking the user. Please try again.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> UnBlock(string id)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+
+            if(!isAdmin)
+            {
+                return Forbid();
+            }
+
+            var userToUnblock = await _userManager.FindByIdAsync(id);
+
+            if(userToUnblock == null)
+            {
+                return NotFound();
+            }
+
+            if(await _userManager.IsLockedOutAsync(userToUnblock) == false)
+            {
+                TempData["ErrorMessage"] = "This user is not currently blocked.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var result = await _userManager.SetLockoutEndDateAsync(userToUnblock, null);
+            
+            if(!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "An error occurred while unblocking the user. Please try again.";
                 return RedirectToAction(nameof(Index));
             }
 
