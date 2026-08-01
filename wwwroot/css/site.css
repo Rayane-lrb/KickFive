@@ -17,7 +17,8 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 60px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -27,4 +28,33 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+.navbar-nav .nav-link {
+    clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+    background: linear-gradient(#2f8f52, #3ba066 ) no-repeat;
+    background-size: 0% 100%;
+    color: #fff !important;
+    width: 140px;
+    padding: 10px 0;
+    margin: 0 8px;
+    text-align: center;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-size 0.35s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    background-size: 100% 100%;
+}
+
+.navbar-nav .register-link {
+    background-color: #f4f4f2;
+    color: #1db954 !important;
+}
+
+.navbar-nav .register-link:hover {
+    color: #fff !important;
 }
