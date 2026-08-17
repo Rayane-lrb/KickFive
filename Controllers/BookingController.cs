@@ -11,13 +11,11 @@ namespace KickFive.Controllers
     {
         private readonly KickFiveContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<User> _roleManager;
 
-        public BookingController(KickFiveContext context, UserManager<User> userManager, RoleManager<User> roleManager)
+        public BookingController(KickFiveContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         [HttpGet]
