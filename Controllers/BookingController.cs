@@ -385,5 +385,22 @@ namespace KickFive.Controllers
         {
             return _context.Booking.Any(e => e.Id == id);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAvailability(int fieldId, DateTime date)
+        {
+            var dayStart = date.Date;
+            var dayEnd = dayStart.AddDays(1);
+
+            var bookings = await _context.Booking
+                .Where(b => b.FieldId == fieldId
+                         && b.StartDateTime < dayEnd
+                         && b.EndDateTime > dayStart
+                         && b.Status != "Cancelled")
+                .Select(b => new { b.StartDateTime, b.EndDateTime })
+                .ToListAsync();
+
+            return Json(bookings);
+        }
     }
 }
