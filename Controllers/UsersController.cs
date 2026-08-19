@@ -9,13 +9,15 @@ namespace KickFive.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        private readonly RoleManager<User> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
 
-        public UsersController(RoleManager<User> roleManager, UserManager<User> userManager)
+
+        public UsersController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+
         }
 
         [HttpGet]

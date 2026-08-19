@@ -30,8 +30,4 @@
     <Using Include="KickFive.Models" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\User\" />
-  </ItemGroup>
-
 </Project>
