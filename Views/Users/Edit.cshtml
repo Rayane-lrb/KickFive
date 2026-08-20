@@ -1,0 +1,107 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model KickFive.Models.User
+@inject Microsoft.AspNetCore.Identity.UserManager<KickFive.Models.User> UserManager
+
+@{
+    var isAdmin = await UserManager.IsInRoleAsync(Model, "Admin");
+    var isBlocked = await UserManager.IsLockedOutAsync(Model);
+}
+
+<div class="container py-4" style="max-width: 640px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Edit user</h1>
+            <p class="text-muted mb-0">@Model.FirstName @Model.LastName</p>
+        </div>
+        <div>
+            @if (isBlocked)
+            {
+                <span class="badge rounded-pill text-bg-danger">Blocked</span>
+            }
+            else
+            {
+                <span class="badge rounded-pill text-bg-success">Active</span>
+            }
+            @if (isAdmin)
+            {
+                <span class="badge rounded-pill text-bg-primary ms-1">Admin</span>
+            }
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" asp-for="FirstName">First name</label>
+                        <input class="form-control" asp-for="FirstName" />
+                        <span class="text-danger small" asp-validation-for="FirstName"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label" asp-for="LastName">Last name</label>
+                        <input class="form-control" asp-for="LastName" />
+                        <span class="text-danger small" asp-validation-for="LastName"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Email">Email</label>
+                    <input class="form-control" asp-for="Email" type="email" />
+                    <span class="text-danger small" asp-validation-for="Email"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="PhoneNumber">Phone number</label>
+                    <input class="form-control" asp-for="PhoneNumber" />
+                    <span class="text-danger small" asp-validation-for="PhoneNumber"></span>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="mb-4">
+                    <label class="form-label" for="role">Role</label>
+                    <select class="form-select" name="role" id="role">
+                        <option value="">Select role</option>
+                        @foreach (var r in (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewBag.Roles)
+                        {
+                            if (r.Name == (string)ViewBag.currentRole)
+                            {
+                                <option value="@r.Name" selected>@r.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@r.Name">@r.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                    <div>
+                        @if (isBlocked)
+                        {
+                            <a class="btn btn-outline-success btn-sm" asp-action="UnBlock" asp-controller="User" asp-route-id="@Model.Id">
+                                Unblock user
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-danger btn-sm" asp-action="Block" asp-controller="User" asp-route-id="@Model.Id">
+                                Block user
+                            </a>
+                        }
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Index" class="btn btn-light">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

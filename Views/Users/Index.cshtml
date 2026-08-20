@@ -12,12 +12,9 @@
     <a asp-action="Create" class="btn btn-primary">Create New User</a>
 </p>
 
-<table class="table">
+<table class="table overflow-scroll">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().FirstName)
             </th>
@@ -32,6 +29,9 @@
             <th>
                 Role
             </th>
+            <th>
+                Blocked
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -39,7 +39,6 @@
         @foreach(var item in Model)
         {
             <tr>
-                <td>@item.Id</td>
                 <td>@item.FirstName</td>
                 <td>@item.LastName</td>
                 <td>@item.Email</td>
@@ -58,8 +57,21 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> |
+                    @{
+                        var isBlocked = await UserManager.IsLockedOutAsync(item);
+                    }
+
+                    @if(isBlocked)
+                    {
+                        <span class="text-danger">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="text-success">No</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a> 
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>

@@ -27,25 +27,13 @@ namespace KickFive.Controllers
             return View(users);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Details(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             var roles = await _roleManager.Roles.ToListAsync();
-
-            return View(roles);
+            ViewBag.roles = roles;
+            return View();
         }
 
         [HttpPost]
@@ -85,12 +73,23 @@ namespace KickFive.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
+
+            if(id == null)
+            {
+                return NotFound();
+            }
             var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
+
+            var roles = await _roleManager.Roles.ToListAsync();
+            ViewBag.roles = roles;
+
+            var currentRole = await _userManager.GetRolesAsync(user);
+            ViewBag.currentRole = currentRole.FirstOrDefault();
 
             return View(user);
         }
@@ -242,6 +241,9 @@ namespace KickFive.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UnBlock(string id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
