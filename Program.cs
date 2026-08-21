@@ -16,6 +16,11 @@ builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.AllowedForNewUsers = true;
+});
+
 var app = builder.Build();
 
 
@@ -59,6 +64,7 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
+
 
     var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var adminEmail = builder.Configuration["AdminUser:Email"];

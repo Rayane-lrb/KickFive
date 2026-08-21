@@ -47,6 +47,7 @@ namespace KickFive.Controllers
                 return View(user);
             }
 
+            user.UserName = user.Email;
             var result = await _userManager.CreateAsync(user, Password);
 
             if (result.Succeeded)
@@ -228,6 +229,11 @@ namespace KickFive.Controllers
             {
                 TempData["ErrorMessage"] = "This user is already blocked.";
                 return RedirectToAction(nameof(Index));
+            }
+
+            if (!await _userManager.GetLockoutEnabledAsync(userToBlock))
+            {
+                await _userManager.SetLockoutEnabledAsync(userToBlock, true);
             }
 
             var result = await _userManager.SetLockoutEndDateAsync(userToBlock, DateTimeOffset.MaxValue);

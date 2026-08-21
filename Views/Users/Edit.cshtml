@@ -81,27 +81,30 @@
                     </select>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                    <div>
-                        @if (isBlocked)
-                        {
-                            <a class="btn btn-outline-success btn-sm" asp-action="UnBlock" asp-controller="User" asp-route-id="@Model.Id">
-                                Unblock user
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-outline-danger btn-sm" asp-action="Block" asp-controller="User" asp-route-id="@Model.Id">
-                                Block user
-                            </a>
-                        }
-                    </div>
+                <div class="d-flex justify-content-end align-items-center pt-2 border-top">
                     <div class="d-flex gap-2">
                         <a asp-action="Index" class="btn btn-light">Cancel</a>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
                 </div>
             </form>
+
+            <div class="pt-3 mt-3 border-top">
+                @if (isBlocked)
+                {
+                    <form asp-action="UnBlock" asp-controller="Users" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-success btn-sm">Unblock user</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="Block" asp-controller="Users" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Block user</button>
+                    </form>
+                }
+            </div>
         </div>
     </div>
 </div>
