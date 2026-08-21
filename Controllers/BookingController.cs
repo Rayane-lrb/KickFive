@@ -33,11 +33,18 @@ namespace KickFive.Controllers
 
             if (isAdmin)
             {
-                bookings = await _context.Booking.ToListAsync();
+                bookings = await _context.Booking
+                    .Include(b => b.User)
+                    .Include(b => b.Field)
+                    .ToListAsync();
             }
             else
             {
-                bookings = await _context.Booking.Where(b => b.UserId == currentUser.Id).ToListAsync();
+                bookings = await _context.Booking
+                    .Include(b => b.User)
+                    .Include(b => b.Field)
+                    .Where(b => b.UserId == currentUser.Id)
+                    .ToListAsync();
             }
             return View(bookings);
         }
@@ -54,7 +61,10 @@ namespace KickFive.Controllers
             }
 
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
-            var booking = await _context.Booking.FirstOrDefaultAsync(b => b.Id == id);
+            var booking = await _context.Booking
+                                            .Include(b => b.Field)
+                                            .Include(b => b.User)
+                                            .FirstOrDefaultAsync(b => b.Id == id);
             if (booking == null)
             {
                 return NotFound();
@@ -103,6 +113,12 @@ namespace KickFive.Controllers
             {
                 return RedirectToPage("/Account/Login", new { area = "Identity" });
             }
+
+            ModelState.Remove(nameof(Booking.UserId));
+            ModelState.Remove(nameof(Booking.Status));
+            ModelState.Remove(nameof(Booking.Price));
+            ModelState.Remove(nameof(Booking.User));
+            ModelState.Remove(nameof(Booking.Field));
 
             if (!ModelState.IsValid || booking.EndDateTime <= booking.StartDateTime)
             {
