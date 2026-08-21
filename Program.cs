@@ -21,6 +21,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 });
 
+
 var app = builder.Build();
 
 

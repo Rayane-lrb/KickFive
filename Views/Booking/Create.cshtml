@@ -1,10 +1,7 @@
 ﻿@model KickFive.Models.Booking
-
-
 <form asp-action="Create" method="post">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
     <div class="mb-3">
         <label asp-for="FieldId" class="form-label">Field</label>
         <select asp-for="FieldId" asp-items="@(new SelectList(ViewBag.Fields, "Id", "Name"))" id="FieldId" class="form-select">
@@ -12,20 +9,15 @@
         </select>
         <span asp-validation-for="FieldId" class="text-danger"></span>
     </div>
-
     <div class="mb-3">
         <label asp-for="StartDateTime" class="form-label">Date</label>
         <input type="date" id="bookingDate" class="form-control" />
     </div>
-
     <div id="availabilitySlots" class="d-flex flex-wrap gap-2 mb-3"></div>
-
     <input asp-for="StartDateTime" type="hidden" id="StartDateTime" />
     <input asp-for="EndDateTime" type="hidden" id="EndDateTime" />
-
     <button type="submit" class="btn btn-primary">Boek</button>
 </form>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -34,44 +26,41 @@
         const openHour = 8;
         const closeHour = 22;
 
+        function toLocalDateTimeString(date) {
+            const pad = n => String(n).padStart(2, "0");
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+        }
+
         async function loadAvailability() {
             const fieldId = document.getElementById("FieldId").value;
             const date = document.getElementById("bookingDate").value;
             const container = document.getElementById("availabilitySlots");
             container.innerHTML = "";
-
             if (!fieldId || !date) return;
-
             const res = await fetch(`/Booking/GetAvailability?fieldId=${fieldId}&date=${date}`);
             const bookings = await res.json();
-
             for (let hour = openHour; hour < closeHour; hour++) {
                 const slotStart = new Date(`${date}T${String(hour).padStart(2, "0")}:00`);
                 const slotEnd = new Date(`${date}T${String(hour + 1).padStart(2, "0")}:00`);
-
                 const isBooked = bookings.some(b => {
                     const bStart = new Date(b.startDateTime);
                     const bEnd = new Date(b.endDateTime);
                     return slotStart < bEnd && slotEnd > bStart;
                 });
-
                 const btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = `btn btn-sm ${isBooked ? "btn-secondary disabled" : "btn-outline-success"}`;
                 btn.textContent = `${hour}:00 - ${hour + 1}:00`;
                 btn.disabled = isBooked;
-
                 if (!isBooked) {
                     btn.onclick = () => {
-                        document.getElementById("StartDateTime").value = slotStart.toISOString().slice(0, 16);
-                        document.getElementById("EndDateTime").value = slotEnd.toISOString().slice(0, 16);
+                        document.getElementById("StartDateTime").value = toLocalDateTimeString(slotStart);
+                        document.getElementById("EndDateTime").value = toLocalDateTimeString(slotEnd);
                     };
                 }
-
                 container.appendChild(btn);
             }
         }
-
         document.getElementById("FieldId").addEventListener("change", loadAvailability);
         document.getElementById("bookingDate").addEventListener("change", loadAvailability);
     </script>
