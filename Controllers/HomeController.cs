@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Net.Mail;
 using KickFive.Models;
 using KickFive.Services;
 using Microsoft.AspNetCore.Mvc;
