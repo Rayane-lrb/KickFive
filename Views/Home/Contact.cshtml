@@ -1,4 +1,6 @@
-﻿@*
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -9,20 +11,18 @@
         @ViewBag.Message
     </div>
 }
-
 <div>
-    <h1>Contact</h1>
+    <h1>@localizer["Contact_Title"]</h1>
     <hr />
     <form asp-action="Contact" asp-controller="Home">
         <div class="card-group">
-            <label class="form-label" for="email">Email</label>
+            <label class="form-label" for="email">@localizer["Contact_Email_Label"]</label>
             <input class="form-control" type="email" id="email" name="email" required />
-            </div>
-
+        </div>
         <div class="card-group">
-            <label class="form-label" for="body">Message</label>
+            <label class="form-label" for="body">@localizer["Contact_Message_Label"]</label>
             <textarea class="form-control" id="body" name="body" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-4">Send</button>
+        <button type="submit" class="btn btn-primary mt-4">@localizer["Contact_Send_Button"]</button>
     </form>
 </div>

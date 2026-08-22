@@ -3,15 +3,13 @@
 *@
 @model IEnumerable<KickFive.Models.User>
 @inject Microsoft.AspNetCore.Identity.UserManager<KickFive.Models.User> UserManager
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
 }
-
-<h1>Manage Users</h1>
-
+<h1>@Localizer["PageTitle"]</h1>
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New User</a>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["CreateNewUser"]</a>
 </p>
-
 <table class="table overflow-scroll">
     <thead>
         <tr>
@@ -20,6 +18,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().LastName)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.First().Email)
             </th>
@@ -27,16 +26,16 @@
                 @Html.DisplayNameFor(model => model.First().PhoneNumber)
             </th>
             <th>
-                Role
+                @Localizer["RoleColumn"]
             </th>
             <th>
-                Blocked
+                @Localizer["BlockedColumn"]
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>@item.FirstName</td>
@@ -49,32 +48,31 @@
                     }
                     @if (isAdmin)
                     {
-                        <span class="badge bg-success">Admin</span>
+                        <span class="badge bg-success">@Localizer["AdminBadge"]</span>
                     }
                     else
                     {
-                        <span class="badge bg-secondary">User</span>
+                        <span class="badge bg-secondary">@Localizer["UserBadge"]</span>
                     }
                 </td>
                 <td>
                     @{
                         var isBlocked = await UserManager.IsLockedOutAsync(item);
                     }
-
-                    @if(isBlocked)
+                    @if (isBlocked)
                     {
-                        <span class="text-danger">Yes</span>
+                        <span class="text-danger">@Localizer["YesLabel"]</span>
                     }
                     else
                     {
-                        <span class="text-success">No</span>
+                        <span class="text-success">@Localizer["NoLabel"]</span>
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">@Localizer["EditButton"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">@Localizer["DeleteButton"]</a>
                 </td>
             </tr>
         }
-        </tbody>
+    </tbody>
 </table>

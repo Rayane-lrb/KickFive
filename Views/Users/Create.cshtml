@@ -2,64 +2,56 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model KickFive.Models.User
-
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 <div class="container py-4" style="max-width: 640px;">
     <div class="mb-4">
-        <h1 class="h3 mb-1">Create user</h1>
-        <p class="text-muted mb-0">Add a new user to the system</p>
+        <h1 class="h3 mb-1">@Localizer["PageTitle"]</h1>
+        <p class="text-muted mb-0">@Localizer["PageSubtitle"]</p>
     </div>
-
     <div class="card shadow-sm">
         <div class="card-body p-4">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" asp-for="FirstName">First name</label>
+                        <label class="form-label" asp-for="FirstName">@Localizer["FirstNameLabel"]</label>
                         <input class="form-control" asp-for="FirstName" />
                         <span class="text-danger small" asp-validation-for="FirstName"></span>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" asp-for="LastName">Last name</label>
+                        <label class="form-label" asp-for="LastName">@Localizer["LastNameLabel"]</label>
                         <input class="form-control" asp-for="LastName" />
                         <span class="text-danger small" asp-validation-for="LastName"></span>
                     </div>
                 </div>
-
                 <div class="mb-3">
-                    <label class="form-label" asp-for="Email">Email</label>
+                    <label class="form-label" asp-for="Email">@Localizer["EmailLabel"]</label>
                     <input class="form-control" asp-for="Email" type="email" />
                     <span class="text-danger small" asp-validation-for="Email"></span>
                 </div>
-
                 <div class="mb-3">
-                    <label class="form-label" asp-for="PhoneNumber">Phone number</label>
+                    <label class="form-label" asp-for="PhoneNumber">@Localizer["PhoneNumberLabel"]</label>
                     <input class="form-control" asp-for="PhoneNumber" />
                     <span class="text-danger small" asp-validation-for="PhoneNumber"></span>
                 </div>
-
                 <div class="mb-3">
-                    <label class="form-label" for="Password">Password</label>
+                    <label class="form-label" for="Password">@Localizer["PasswordLabel"]</label>
                     <input class="form-control" type="password" id="Password" name="Password" />
                 </div>
-
                 <hr class="my-4" />
-
                 <div class="mb-4">
-                    <label class="form-label" for="role">Role</label>
+                    <label class="form-label" for="role">@Localizer["RoleLabel"]</label>
                     <select class="form-select" name="role" id="role">
-                        <option value="">Select role</option>
+                        <option value="">@Localizer["SelectRole"]</option>
                         @foreach (var r in (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewBag.Roles)
                         {
                             <option value="@r.Name">@r.Name</option>
                         }
                     </select>
                 </div>
-
                 <div class="d-flex justify-content-end gap-2 pt-2 border-top">
-                    <a asp-action="Index" class="btn btn-light">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Create user</button>
+                    <a asp-action="Index" class="btn btn-light">@Localizer["CancelButton"]</a>
+                    <button type="submit" class="btn btn-primary">@Localizer["CreateUserButton"]</button>
                 </div>
             </form>
         </div>

@@ -153,3 +153,17 @@ body {
     background-color: green;
     clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
 }
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #198754;
+    color: #fff;
+}
+
+.lang-dropdown .dropdown-menu {
+    min-width: 160px;
+}
+
+.lang-dropdown .dropdown-toggle::after {
+    vertical-align: middle;
+}

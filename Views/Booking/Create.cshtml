@@ -1,22 +1,23 @@
 ﻿@model KickFive.Models.Booking
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 <form asp-action="Create" method="post">
     @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
-        <label asp-for="FieldId" class="form-label">Field</label>
+        <label asp-for="FieldId" class="form-label">@Localizer["FieldLabel"]</label>
         <select asp-for="FieldId" asp-items="@(new SelectList(ViewBag.Fields, "Id", "Name"))" id="FieldId" class="form-select">
-            <option value="">Chose a field</option>
+            <option value="">@Localizer["ChooseField"]</option>
         </select>
         <span asp-validation-for="FieldId" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="StartDateTime" class="form-label">Date</label>
+        <label asp-for="StartDateTime" class="form-label">@Localizer["DateLabel"]</label>
         <input type="date" id="bookingDate" class="form-control" />
     </div>
     <div id="availabilitySlots" class="d-flex flex-wrap gap-2 mb-3"></div>
     <input asp-for="StartDateTime" type="hidden" id="StartDateTime" />
     <input asp-for="EndDateTime" type="hidden" id="EndDateTime" />
-    <button type="submit" class="btn btn-primary">Boek</button>
+    <button type="submit" class="btn btn-primary">@Localizer["BookButton"]</button>
 </form>
 @section Scripts {
     @{
@@ -25,12 +26,10 @@
     <script>
         const openHour = 8;
         const closeHour = 22;
-
         function toLocalDateTimeString(date) {
             const pad = n => String(n).padStart(2, "0");
             return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
         }
-
         async function loadAvailability() {
             const fieldId = document.getElementById("FieldId").value;
             const date = document.getElementById("bookingDate").value;

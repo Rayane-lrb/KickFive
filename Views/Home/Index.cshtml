@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer;
+@{
     ViewData["Title"] = "Home Page";
 }
 <div class="">
@@ -6,57 +8,45 @@
         <video autoplay muted loop playsinline>
             <source src="@Url.Content("~/videos/kickfive_home.mp4")?v=2" type="video/mp4">
         </video>
-
-        <a class="btn btn-danger btn-lg hero-cta border-2 border-white" asp-controller="Booking" asp-action="Create">Book Now &rarr;</a>
+        <a class="btn btn-danger btn-lg hero-cta border-2 border-white" asp-controller="Booking" asp-action="Create">@localizer["BookNow_Button"] &rarr;</a>
     </div>
-
     <div id="about_us" class="mt-5 py-5">
         <div>
             <div class="values-border w-75 bg-success" style="height: 20px">
-
             </div>
         </div>
-
         <div class="m-4">
-            <h2>Our Values</h2>
-            <p>At KickFive, football is more than just a game. It’s about passion, teamwork, respect, and having fun. We <br />
-                believe every match is an opportunity to bring people together, challenge yourself, and create unforgettable<br />
-                moments.<br />
+            <h2>@localizer["OurValues_Title"]</h2>
+            <p>
+                @localizer["OurValues_Paragraph1"]<br />
                 <br />
-                Whether you’re playing with friends, competing against new opponents, or simply enjoying a game, our goal<br />
-                is to create an atmosphere where everyone can play, connect, and enjoy the beautiful game.<br />
+                @localizer["OurValues_Paragraph2"]<br />
                 <br />
-                Passion brings us together. Teamwork makes us stronger. Respect keeps the game alive. And fun makes<br />
-                every match memorable.<br />
+                @localizer["OurValues_Paragraph3"]<br />
             </p>
         </div>
-
         <div>
             <div class="values-border w-75 bg-success" style="height: 20px">
             </div>
         </div>
     </div>
-
     <div id="pricing" class="bg-dark py-5 mt-5" style="width: 100vw; margin-left: calc(-50vw + 50%);">
         <div class="d-flex justify-content-center">
             <div class="text-light text-center" style="max-width: 400px;">
-                <h2 class="mb-4">Pricing</h2>
+                <h2 class="mb-4">@localizer["Pricing_Title"]</h2>
                 <div class="card bg-transparent border-success border-2 p-4">
-                    <div class="display-4 fw-bold text-success mb-0">€80</div>
-                    <div class="text-uppercase small mb-4" style="letter-spacing: 1px;">per hour</div>
+                    <div class="display-4 fw-bold text-success mb-0">@localizer["Pricing_Price"]</div>
+                    <div class="text-uppercase small mb-4" style="letter-spacing: 1px;">@localizer["Pricing_PerHour"]</div>
                     <ul class="list-unstyled text-start text-white mb-0">
-                        <li class="mb-2">✔ Full pitch rental (5-a-side)</li>
-                        <li class="mb-2">✔ Goals & nets included</li>
-                        <li class="mb-2">✔ Changing rooms & showers</li>
-                        <li class="mb-2">✔ Floodlights for evening games</li>
-                        <li class="mb-2">✔ Bibs provided</li>
-                        <li class="mb-2">✔ Balls provided</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature1"]</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature2"]</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature3"]</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature4"]</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature5"]</li>
+                        <li class="mb-2">✔ @localizer["Pricing_Feature6"]</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>
-

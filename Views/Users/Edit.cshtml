@@ -3,6 +3,7 @@
 *@
 @model KickFive.Models.User
 @inject Microsoft.AspNetCore.Identity.UserManager<KickFive.Models.User> UserManager
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
     var isAdmin = await UserManager.IsInRoleAsync(Model, "Admin");
@@ -12,21 +13,21 @@
 <div class="container py-4" style="max-width: 640px;">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-1">Edit user</h1>
+            <h1 class="h3 mb-1">@Localizer["PageTitle"]</h1>
             <p class="text-muted mb-0">@Model.FirstName @Model.LastName</p>
         </div>
         <div>
             @if (isBlocked)
             {
-                <span class="badge rounded-pill text-bg-danger">Blocked</span>
+                <span class="badge rounded-pill text-bg-danger">@Localizer["StatusBlocked"]</span>
             }
             else
             {
-                <span class="badge rounded-pill text-bg-success">Active</span>
+                <span class="badge rounded-pill text-bg-success">@Localizer["StatusActive"]</span>
             }
             @if (isAdmin)
             {
-                <span class="badge rounded-pill text-bg-primary ms-1">Admin</span>
+                <span class="badge rounded-pill text-bg-primary ms-1">@Localizer["AdminBadge"]</span>
             }
         </div>
     </div>
@@ -38,25 +39,25 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" asp-for="FirstName">First name</label>
+                        <label class="form-label" asp-for="FirstName">@Localizer["FirstNameLabel"]</label>
                         <input class="form-control" asp-for="FirstName" />
                         <span class="text-danger small" asp-validation-for="FirstName"></span>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label" asp-for="LastName">Last name</label>
+                        <label class="form-label" asp-for="LastName">@Localizer["LastNameLabel"]</label>
                         <input class="form-control" asp-for="LastName" />
                         <span class="text-danger small" asp-validation-for="LastName"></span>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" asp-for="Email">Email</label>
+                    <label class="form-label" asp-for="Email">@Localizer["EmailLabel"]</label>
                     <input class="form-control" asp-for="Email" type="email" />
                     <span class="text-danger small" asp-validation-for="Email"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" asp-for="PhoneNumber">Phone number</label>
+                    <label class="form-label" asp-for="PhoneNumber">@Localizer["PhoneNumberLabel"]</label>
                     <input class="form-control" asp-for="PhoneNumber" />
                     <span class="text-danger small" asp-validation-for="PhoneNumber"></span>
                 </div>
@@ -64,9 +65,9 @@
                 <hr class="my-4" />
 
                 <div class="mb-4">
-                    <label class="form-label" for="role">Role</label>
+                    <label class="form-label" for="role">@Localizer["RoleLabel"]</label>
                     <select class="form-select" name="role" id="role">
-                        <option value="">Select role</option>
+                        <option value="">@Localizer["SelectRole"]</option>
                         @foreach (var r in (List<Microsoft.AspNetCore.Identity.IdentityRole>)ViewBag.Roles)
                         {
                             if (r.Name == (string)ViewBag.currentRole)
@@ -83,8 +84,8 @@
 
                 <div class="d-flex justify-content-end align-items-center pt-2 border-top">
                     <div class="d-flex gap-2">
-                        <a asp-action="Index" class="btn btn-light">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <a asp-action="Index" class="btn btn-light">@Localizer["CancelButton"]</a>
+                        <button type="submit" class="btn btn-primary">@Localizer["SaveChangesButton"]</button>
                     </div>
                 </div>
             </form>
@@ -94,14 +95,14 @@
                 {
                     <form asp-action="UnBlock" asp-controller="Users" asp-route-id="@Model.Id" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-outline-success btn-sm">Unblock user</button>
+                        <button type="submit" class="btn btn-outline-success btn-sm">@Localizer["UnblockUserButton"]</button>
                     </form>
                 }
                 else
                 {
                     <form asp-action="Block" asp-controller="Users" asp-route-id="@Model.Id" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-outline-danger btn-sm">Block user</button>
+                        <button type="submit" class="btn btn-outline-danger btn-sm">@Localizer["BlockUserButton"]</button>
                     </form>
                 }
             </div>

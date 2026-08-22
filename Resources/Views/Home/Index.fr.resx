@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OurValues_Title" xml:space="preserve">
+    <value>Nos valeurs</value>
+  </data>
+  <data name="OurValues_Paragraph1" xml:space="preserve">
+    <value>Chez KickFive, le football est bien plus qu'un simple jeu. C'est une question de passion, d'esprit d'équipe, de respect et de plaisir. Nous croyons que chaque match est une occasion de rassembler les gens, de se dépasser et de créer des moments inoubliables.</value>
+  </data>
+  <data name="OurValues_Paragraph2" xml:space="preserve">
+    <value>Que vous jouiez entre amis, affrontiez de nouveaux adversaires, ou profitiez simplement d'une partie, notre objectif est de créer une atmosphère où chacun peut jouer, se connecter et profiter du plus beau des sports.</value>
+  </data>
+  <data name="OurValues_Paragraph3" xml:space="preserve">
+    <value>La passion nous rassemble. L'esprit d'équipe nous rend plus forts. Le respect fait vivre le jeu. Et le plaisir rend chaque match mémorable.</value>
+  </data>
+  <data name="Pricing_Title" xml:space="preserve">
+    <value>Tarifs</value>
+  </data>
+  <data name="Pricing_Price" xml:space="preserve">
+    <value>80 €</value>
+  </data>
+  <data name="Pricing_PerHour" xml:space="preserve">
+    <value>par heure</value>
+  </data>
+  <data name="Pricing_Feature1" xml:space="preserve">
+    <value>Location de terrain complet (5 contre 5)</value>
+  </data>
+  <data name="Pricing_Feature2" xml:space="preserve">
+    <value>Buts et filets inclus</value>
+  </data>
+  <data name="Pricing_Feature3" xml:space="preserve">
+    <value>Vestiaires et douches</value>
+  </data>
+  <data name="Pricing_Feature4" xml:space="preserve">
+    <value>Éclairage pour les matchs en soirée</value>
+  </data>
+  <data name="Pricing_Feature5" xml:space="preserve">
+    <value>Chasubles fournies</value>
+  </data>
+  <data name="Pricing_Feature6" xml:space="preserve">
+    <value>Ballons fournis</value>
+  </data>
+  <data name="BookNow_Button" xml:space="preserve">
+    <value>Réserver</value>
+  </data>
+</root>

@@ -2,22 +2,16 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model IEnumerable<KickFive.Models.Booking>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Bookings";
+    ViewData["Title"] = Localizer[""];
 }
-
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-end mb-4">
-        <div>
             <h1 class="h3 mb-1">Bookings</h1>
-            <p class="text-muted mb-0">@Model.Count() booking@(Model.Count() == 1 ? "" : "s") found</p>
-        </div>
-    </div>
-
     @if (!Model.Any())
     {
         <div class="text-center py-5 text-muted border rounded-3">
-            <p class="mb-0">No bookings yet.</p>
+            <p class="mb-0">@Localizer["NoBookingsYet"]</p>
         </div>
     }
     else
@@ -25,6 +19,13 @@
         <div class="row g-3">
             @foreach (var item in Model)
             {
+                var statusKey = item.Status?.ToString()?.ToLower() switch
+                {
+                    "confirmed" => "StatusConfirmed",
+                    "pending" => "StatusPending",
+                    "cancelled" => "StatusCancelled",
+                    _ => null
+                };
                 var statusClass = item.Status?.ToString()?.ToLower() switch
                 {
                     "confirmed" => "text-bg-success",
@@ -32,7 +33,7 @@
                     "cancelled" => "text-bg-danger",
                     _ => "text-bg-secondary"
                 };
-
+                var statusText = statusKey != null ? Localizer[statusKey].Value : item.Status?.ToString();
                 <div class="card shadow-sm h-100 position-relative">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
@@ -40,7 +41,7 @@
                                asp-controller="Users" asp-action="Edit" asp-route-id="@item.User.Id">
                                 @item.User.FirstName @item.User.LastName
                             </a>
-                            <span class="badge rounded-pill @statusClass">@item.Status</span>
+                            <span class="badge rounded-pill @statusClass">@statusText</span>
                         </div>
                         <p class="mb-2 text-muted small text-uppercase">@item.Field.Name</p>
                         <div class="d-flex align-items-center gap-2 small">
@@ -52,6 +53,6 @@
                     </div>
                 </div>
             }
-    </div>
+        </div>
     }
 </div>

@@ -1,12 +1,11 @@
 @model KickFive.Models.Field
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>Field</h4>
+<h1>@localizer["FieldsEdit_Title"]</h1>
+<h4>@localizer["FieldsEdit_Field"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,16 +18,16 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="@localizer["FieldsEdit_Save"]" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@localizer["FieldsEdit_BackToList"]</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
