@@ -1,5 +1,7 @@
 using System.Diagnostics;
+using System.Net.Mail;
 using KickFive.Models;
+using KickFive.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KickFive.Controllers
@@ -7,10 +9,11 @@ namespace KickFive.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IEmailSender _emailSender;
+        public HomeController(ILogger<HomeController> logger, IEmailSender emailSender)
         {
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -19,8 +22,17 @@ namespace KickFive.Controllers
         }
 
 
-        public IActionResult Contact()
+        public IActionResult Contact(string email, string body)
         {
+            if(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(body))
+            {
+                ViewBag.Message = "Please fill in all fields.";
+                return View();
+            }
+
+            _emailSender.SendEmailAsync("myMail", "Contact Form Submission", "Client mail: "+ email + " " + body);
+
+            ViewBag.Message = "Email sent successfully!";
             return View();
         }
 

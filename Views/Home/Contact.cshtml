@@ -3,3 +3,26 @@
 *@
 @{
 }
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+
+<div>
+    <h1>Contact</h1>
+    <hr />
+    <form asp-action="Contact" asp-controller="Home">
+        <div class="card-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" id="email" name="email" required />
+            </div>
+
+        <div class="card-group">
+            <label class="form-label" for="body">Message</label>
+            <textarea class="form-control" id="body" name="body" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Send</button>
+    </form>
+</div>
