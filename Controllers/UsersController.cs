@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -11,20 +12,41 @@ namespace KickFive.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly KickFiveContext _context;
 
-
-        public UsersController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public UsersController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, KickFiveContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
-
+            _context = context;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
         {
-            var users = await _userManager.Users.ToListAsync();
-            return View(users);
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["EmailSortParm"] = sortOrder == "email" ? "email_desc" : "email";
+            ViewData["CurrentFilter"] = searchString;
+
+            var users = _context.User.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u =>
+                    u.FirstName.Contains(searchString) ||
+                    u.LastName.Contains(searchString) ||
+                    u.Email.Contains(searchString));
+            }
+
+            users = sortOrder switch
+            {
+                "name_desc" => users.OrderByDescending(u => u.LastName),
+                "email" => users.OrderBy(u => u.Email),
+                "email_desc" => users.OrderByDescending(u => u.Email),
+                _ => users.OrderBy(u => u.LastName),
+            };
+
+            return View(await users.ToListAsync());
         }
 
 

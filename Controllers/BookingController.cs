@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -19,7 +21,7 @@ namespace KickFive.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string statusFilter, int? fieldFilter, string sortOrder)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
@@ -29,24 +31,49 @@ namespace KickFive.Controllers
 
             var isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
 
-            IEnumerable<Booking> bookings;
+            var bookings = _context.Booking
+                .Include(b => b.User)
+                .Include(b => b.Field)
+                .AsQueryable();
 
-            if (isAdmin)
+            if (!isAdmin)
             {
-                bookings = await _context.Booking
-                    .Include(b => b.User)
-                    .Include(b => b.Field)
-                    .ToListAsync();
+                bookings = bookings.Where(b => b.UserId == currentUser.Id);
             }
-            else
+
+            ViewData["DateSortParm"] = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+            ViewData["StatusSortParm"] = sortOrder == "status" ? "status_desc" : "status";
+
+            
+            if (!string.IsNullOrEmpty(statusFilter))
             {
-                bookings = await _context.Booking
-                    .Include(b => b.User)
-                    .Include(b => b.Field)
-                    .Where(b => b.UserId == currentUser.Id)
-                    .ToListAsync();
+                bookings = bookings.Where(b => b.Status == statusFilter);
             }
-            return View(bookings);
+
+            if (fieldFilter.HasValue)
+            {
+                bookings = bookings.Where(b => b.FieldId == fieldFilter.Value);
+            }
+
+            
+            bookings = sortOrder switch
+            {
+                "date_desc" => bookings.OrderByDescending(b => b.StartDateTime),
+                "price" => bookings.OrderBy(b => b.Price),
+                "price_desc" => bookings.OrderByDescending(b => b.Price),
+                "status" => bookings.OrderBy(b => b.Status),
+                "status_desc" => bookings.OrderByDescending(b => b.Status),
+                _ => bookings.OrderBy(b => b.StartDateTime),
+            };
+
+            
+            ViewBag.Statuses = new SelectList(new[] { "Pending", "Confirmed", "Cancelled" });
+            ViewBag.Fields = new SelectList(await _context.Field.ToListAsync(), "Id", "Name");
+            ViewBag.CurrentStatus = statusFilter;
+            ViewBag.CurrentField = fieldFilter;
+
+            return View(await bookings.ToListAsync());
         }
 
         [HttpGet]
