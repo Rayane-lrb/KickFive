@@ -229,7 +229,7 @@ Of druk op **F5** in Visual Studio. Bij de eerste opstart:
 De applicatie is nu bereikbaar op `https://localhost:7203` (of de poort die in de console getoond wordt).
 
 ## Gebruikte AI-tools en bronnen
--Ai gebruikt voor debuggen, hulp bij ajax implementatie en Readme
+-Ai gebruikt voor debuggen, hulp bij ajax implementatie, vertaling voor .resx files en Readme
 -.Net Doc: https://learn.microsoft.com/en-us/dotnet/
 - https://youtu.be/UY0AAnOhep4?si=06SWHINZqwUjJyqp
 - https://youtu.be/P0i0aMPNa0I?si=61mbOCxxYQwheel8
