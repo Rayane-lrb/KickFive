@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+﻿ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
@@ -16,24 +16,35 @@ namespace KickFive.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var smtpHost = _configuration["Smtp:Host"];
-            var smtpPort = int.Parse(_configuration["Smtp:Port"]);
-            var smtpUser = _configuration["Smtp:User"];
-            var smtpPass = _configuration["Smtp:Pass"];
+            var smtpHost = _configuration["Email:SmtpHost"];
+            var smtpPort = int.Parse(_configuration["Email:SmtpPort"]);
+            var smtpUser = _configuration["Email:SmtpUser"];
+            var smtpPass = _configuration["Email:SmtpPass"];
 
-            using (var client = new SmtpClient(smtpHost, smtpPort))
+            Console.WriteLine($"[SMTP DEBUG] Host={smtpHost}, Port={smtpPort}, User={smtpUser}");
+
+            try
             {
-                client.Credentials = new NetworkCredential(smtpUser, smtpPass);
-                client.EnableSsl = true;
-                var mailMessage = new MailMessage
+                using (var client = new SmtpClient(smtpHost, smtpPort))
                 {
-                    From = new MailAddress(smtpUser),
-                    Subject = subject,
-                    Body = htmlMessage,
-                    IsBodyHtml = true
-                };
-                mailMessage.To.Add(email);
-                await client.SendMailAsync(mailMessage);
+                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                    client.EnableSsl = true;
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("noreply@kickfive.com"),
+                        Subject = subject,
+                        Body = htmlMessage,
+                        IsBodyHtml = true
+                    };
+                    mailMessage.To.Add(email);
+                    await client.SendMailAsync(mailMessage);
+                    Console.WriteLine("[SMTP DEBUG] Email sent successfully.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[SMTP DEBUG] FAILED: {ex.GetType().Name} - {ex.Message}");
+                throw;
             }
         }
     }

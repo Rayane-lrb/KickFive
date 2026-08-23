@@ -1,19 +1,32 @@
-using Microsoft.EntityFrameworkCore;
+using KickFive.Data;
+using KickFive.Services;
 using KickFive.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using KickFive.Services;
-using KickFive.Data;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("KickFiveContext") ?? throw new InvalidOperationException("Connection string 'KickFiveContext' not found.");
 
-builder.Services.AddDbContext<KickFiveContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<KickFiveContext>(options => 
+    options.UseSqlServer(
+        connectionString,
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<KickFiveContext>().AddDefaultTokenProviders();
 
 builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddViewLocalization(options => options.ResourcesPath = "Resources");
 

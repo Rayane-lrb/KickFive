@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using KickFive.Models;
-using KickFive.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace KickFive.Controllers
 {
@@ -21,17 +22,27 @@ namespace KickFive.Controllers
         }
 
 
-        public IActionResult Contact(string email, string body)
+        public async Task<IActionResult> Contact(string email, string body)
         {
-            if(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(body))
+            if(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(body) || !email.Contains("@"))
             {
                 ViewBag.Message = "Please fill in all fields.";
                 return View();
             }
 
-            _emailSender.SendEmailAsync("myMail", "Contact Form Submission", "Client mail: "+ email + " " + body);
+            try
+            {
+                await _emailSender.SendEmailAsync(
+                    "contact@kickfive.com",
+                    "Contact Form Submission",
+                    "Client mail: " + email + " " + body);
 
-            ViewBag.Message = "Email sent successfully!";
+                ViewBag.Message = "Email sent successfully!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Failed to send email. Please try again later.";
+            }
             return View();
         }
 
