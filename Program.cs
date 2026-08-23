@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using KickFive.Services;
+using KickFive.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("KickFiveContext") ?? throw new InvalidOperationException("Connection string 'KickFiveContext' not found.");
@@ -112,5 +113,12 @@ using (var scope = app.Services.CreateScope())
 
         }
     }
+    var context = scope.ServiceProvider.GetRequiredService<KickFiveContext>();
+    await context.Database.MigrateAsync();
+
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    var seeder = new DbSeeder(userManager, configuration);
+    await seeder.SeedAsync(context);
 }
 app.Run();

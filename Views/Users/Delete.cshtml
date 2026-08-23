@@ -1,0 +1,32 @@
+﻿@model KickFive.Models.User
+@inject Microsoft.AspNetCore.Identity.UserManager<KickFive.Models.User> UserManager
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<h1>Delete User</h1>
+
+<h3>Ben je zeker dat je deze user wilt verwijderen?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">@Localizer["First Name"]</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+
+        <dt class="col-sm-2">@Localizer["Last Name"]</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+
+        <dt class="col-sm-2">@Localizer["Email"]</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+
+        <dt class="col-sm-2">@Localizer["Phone"]</dt>
+        <dd class="col-sm-10">@Model.PhoneNumber</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
+    </form>
+</div>
